@@ -1,0 +1,36 @@
+---
+version: "2.0"
+services:
+  restreamer-retry2:
+    image: datarhei/restreamer:latest
+    expose:
+      - port: 8080
+        to:
+          - global: true
+      - port: 1935
+        proto: tcp
+        to:
+          - global: true
+    env:
+      - CORE_HOST_AUTO=true
+profiles:
+  compute:
+    restreamer-retry2:
+      resources:
+        cpu:
+          units: 1
+        memory:
+          size: 512Mi
+        storage:
+          - size: 512Mi
+  placement:
+    dcloud:
+      pricing:
+        restreamer-retry2:
+          denom: uakt
+          amount: 1000
+deployment:
+  restreamer-retry2:
+    dcloud:
+      profile: restreamer-retry2
+      count: 1
